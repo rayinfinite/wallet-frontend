@@ -1,4 +1,4 @@
-import { deleteBook, getBookList } from '@/services/wallet/Book';
+import { deleteBook, getBookList } from '@/services/wallet/book';
 import t from '@/utils/i18n';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { ProColumns } from '@ant-design/pro-components';

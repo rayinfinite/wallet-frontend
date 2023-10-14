@@ -1,5 +1,5 @@
 import MyModalForm from '@/components/MyModalForm';
-import { addAccount, updateAccount } from '@/services/wallet/Account';
+import { addAccount, updateAccount } from '@/services/wallet/account';
 import { amountRule, requiredRule } from '@/utils/formInputRules';
 import t from '@/utils/i18n';
 import { ProFormText, ProFormTextArea } from '@ant-design/pro-components';

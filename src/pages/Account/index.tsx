@@ -1,4 +1,4 @@
-import { deleteAccount, getAccountPage } from '@/services/wallet/Account';
+import { deleteAccount, getAccountPage } from '@/services/wallet/account';
 import t from '@/utils/i18n';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { type ProColumns } from '@ant-design/pro-components';

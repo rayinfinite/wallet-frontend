@@ -1,5 +1,5 @@
 import MyModalForm from '@/components/MyModalForm';
-import { addBook, updateBook } from '@/services/wallet/Book';
+import { addBook, updateBook } from '@/services/wallet/book';
 import { amountRule, requiredRule } from '@/utils/formInputRules';
 import t from '@/utils/i18n';
 import { ProFormText, ProFormTextArea } from '@ant-design/pro-components';

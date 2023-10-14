@@ -147,7 +147,6 @@ declare namespace API {
     icon?: string;
     type?: number;
     child?: Category[];
-    book?: Book;
   };
 
   type ChangePassword = {
@@ -230,15 +229,15 @@ declare namespace API {
   type PageableObject = {
     offset?: number;
     sort?: SortObject;
-    pageSize?: number;
     pageNumber?: number;
-    unpaged?: boolean;
+    pageSize?: number;
     paged?: boolean;
+    unpaged?: boolean;
   };
 
   type PageAccount = {
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Account[];
     number?: number;
@@ -251,8 +250,8 @@ declare namespace API {
   };
 
   type PageTransaction = {
-    totalPages?: number;
     totalElements?: number;
+    totalPages?: number;
     size?: number;
     content?: Transaction[];
     number?: number;
@@ -266,14 +265,14 @@ declare namespace API {
 
   type SortObject = {
     empty?: boolean;
-    unsorted?: boolean;
     sorted?: boolean;
+    unsorted?: boolean;
   };
 
   type Transaction = {
     id?: number;
-    categoryId: number;
     amount: number;
+    category?: Category;
     account?: number;
     book?: number;
     time?: string;

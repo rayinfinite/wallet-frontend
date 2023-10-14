@@ -1,6 +1,6 @@
-import { getTransactionRange } from '@/services/wallet/Transaction';
+import '@/material.css';
+import { getTransactionRange } from '@/services/wallet/transaction';
 import { ProList } from '@ant-design/pro-components';
-import { useRequest } from '@umijs/max';
 import { Space, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 
@@ -19,11 +19,10 @@ const getData = async (): Promise<API.Transaction[]> => {
 };
 
 export default () => {
-  const { data: transaction = [] } = useRequest(() => getData());
-  console.log(transaction);
   const [dataSource, setDataSource] = useState<API.Transaction[]>();
   useEffect(() => {
     getData().then((data) => {
+      console.log(data);
       setDataSource(data);
     });
   }, []);
@@ -42,11 +41,13 @@ export default () => {
       onDataSourceChange={setDataSource}
       metas={{
         title: {
-          dataIndex: 'catagotyId',
+          dataIndex: 'catagory.name',
         },
         avatar: {
-          dataIndex: 'catagotyId',
-          editable: false,
+          dataIndex: 'catagory.icon',
+          render: (text, row) => {
+            return <span className="material-symbols-outlined">{row.category?.icon}</span>;
+          },
         },
         description: {
           dataIndex: 'time',
@@ -61,18 +62,19 @@ export default () => {
             );
           },
         },
-        // actions: {
-        //   render: (text, row, index, action) => [
-        //     <a
-        //       onClick={() => {
-        //         action?.startEditable(row.id);
-        //       }}
-        //       key="link"
-        //     >
-        //       编辑
-        //     </a>,
-        //   ],
-        // },
+        actions: {
+          dataIndex: 'amount',
+          // render: (text, row, index, action) => [
+          //   <a
+          //     onClick={() => {
+          //       action?.startEditable(row.id);
+          //     }}
+          //     key="link"
+          //   >
+          //     编辑
+          //   </a>,
+          // ],
+        },
       }}
     />
   );
