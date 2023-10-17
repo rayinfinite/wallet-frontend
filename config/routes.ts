@@ -29,6 +29,12 @@ export default [
     component: './Welcome',
   },
   {
+    path: '/dashboard',
+    name: 'dashboard',
+    icon: 'PieChart',
+    component: './Dashboard',
+  },
+  {
     path: '/detail',
     name: 'detail',
     icon: 'FileTextOutlined',

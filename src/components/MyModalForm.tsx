@@ -1,34 +1,37 @@
 import { ModalForm } from '@ant-design/pro-components';
-import { useEffect, useRef, useState } from 'react';
+import { useModel } from '@umijs/max';
+import { FormInstance } from 'antd/lib';
+import { useRef } from 'react';
 
 type MyModalFormProps = React.PropsWithChildren<{
   title: string;
-  trigger: JSX.Element;
   width?: number;
   labelWidth?: number;
-  initialValues?: Record<string, any>;
   request: (values: Record<string, any>) => Promise<void>;
   params?: Record<string, any>;
   onSuccess?: () => void;
   autoFocusFirstInput?: boolean;
   isKeyPressSubmit?: boolean;
   parentFormRef?: React.RefObject<any>;
+  onInit: () => Record<string, any>;
 }>;
 
+/**不使用trigger的原因是如果使用trigger，产生的每一个modal是不一样的 */
 export default function MyModalForm(props: MyModalFormProps) {
-  let formRef = useRef();
+  const { visible, setVisible } = useModel('modal');
+
+  let formRef = useRef<FormInstance>();
   const {
     title,
-    trigger,
     width = 600,
     labelWidth,
-    initialValues = {},
     request,
     params,
     onSuccess,
     autoFocusFirstInput = false,
     isKeyPressSubmit = true,
     parentFormRef,
+    onInit,
   } = props;
 
   if (parentFormRef) formRef = parentFormRef;
@@ -40,17 +43,12 @@ export default function MyModalForm(props: MyModalFormProps) {
     return true;
   };
 
-  // const [ visible, setVisible ] = useModel('modal');
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    // 加visible是为了每次打开都执行一次，清空前面的输入
-    if (visible && initialValues && Object.keys(initialValues).length > 0) {
-      // 把之前的输入清空，因为有些输入项没有被initialValues包含。
-      formRef.current?.resetFields();
-      formRef.current?.setFieldsValue({ ...initialValues });
-    }
-  }, [initialValues, visible]);
+  const onOpenChange = async (open: boolean) => {
+    setVisible(open);
+    const a = await onInit();
+    console.log('a', a);
+    formRef.current?.setFieldsValue({ ...(a || {}) });
+  };
 
   return (
     <ModalForm
@@ -59,10 +57,9 @@ export default function MyModalForm(props: MyModalFormProps) {
       grid={true}
       labelCol={{ style: { width: 'auto', minWidth: labelWidth } }}
       title={title}
-      trigger={trigger}
       formRef={formRef}
       open={visible}
-      onOpenChange={setVisible}
+      onOpenChange={onOpenChange}
       onFinish={finishHandler}
       dateFormatter={(value) => value.valueOf()}
       modalProps={{ destroyOnClose: false, maskClosable: false }}

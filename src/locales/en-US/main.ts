@@ -21,4 +21,15 @@ export default {
   'pages.login.register.email.placeholder': 'Email',
   'pages.login.register.username.placeholder': 'Username',
   'pages.login.register.password.placeholder': 'Password',
+
+  asset: 'Asset',
+  debt: 'Debt',
+  'net.worth': 'Net Worth',
+
+  'asset.category': 'Asset Category',
+  'debt.category': 'Debt Category',
+  'gross.amount': 'Gross Amount',
+  amount: 'Amount',
+  type: 'Type',
+  transaction: 'Transaction',
 };

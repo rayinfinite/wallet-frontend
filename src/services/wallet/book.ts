@@ -73,6 +73,38 @@ export async function getBookList(options?: { [key: string]: any }) {
   });
 }
 
+/** Book Overview GET /book/overview */
+export async function overview(options?: { [key: string]: any }) {
+  return request<API.BaseResponseLong>('/book/overview', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** Report Balance GET /book/reportBalance */
+export async function reportBalance(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListListChartVO>('/book/reportBalance', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** Report Expense Category GET /book/reportExpenseCategory */
+export async function reportExpenseCategory(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListChartVO>('/book/reportExpenseCategory', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
+/** Report Income Category GET /book/reportIncomeCategory */
+export async function reportIncomeCategory(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListChartVO>('/book/reportIncomeCategory', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** Get user list POST /book/user */
 export async function getUserList(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)

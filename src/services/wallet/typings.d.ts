@@ -44,8 +44,9 @@ declare namespace API {
     categoryId: number;
     amount: number;
     accountId?: number;
-    disabled?: boolean;
     notes?: string;
+    type?: string;
+    time?: string;
   };
 
   type addTransactionParams = {
@@ -90,9 +91,27 @@ declare namespace API {
     message?: string;
   };
 
+  type BaseResponseListChartVO = {
+    code?: number;
+    data?: ChartVO[];
+    message?: string;
+  };
+
+  type BaseResponseListListChartVO = {
+    code?: number;
+    data?: ChartVO[][];
+    message?: string;
+  };
+
   type BaseResponseListUser = {
     code?: number;
     data?: User[];
+    message?: string;
+  };
+
+  type BaseResponseLong = {
+    code?: number;
+    data?: number[];
     message?: string;
   };
 
@@ -156,6 +175,11 @@ declare namespace API {
 
   type changePasswordParams = {
     changePassword: ChangePassword;
+  };
+
+  type ChartVO = {
+    x?: string;
+    y?: number;
   };
 
   type deleteAccountParams = {
@@ -229,35 +253,35 @@ declare namespace API {
   type PageableObject = {
     offset?: number;
     sort?: SortObject;
-    pageNumber?: number;
     pageSize?: number;
+    pageNumber?: number;
     paged?: boolean;
     unpaged?: boolean;
   };
 
   type PageAccount = {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
+    first?: boolean;
+    last?: boolean;
     size?: number;
     content?: Account[];
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
     empty?: boolean;
   };
 
   type PageTransaction = {
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
+    first?: boolean;
+    last?: boolean;
     size?: number;
     content?: Transaction[];
     number?: number;
     sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
     numberOfElements?: number;
     pageable?: PageableObject;
     empty?: boolean;

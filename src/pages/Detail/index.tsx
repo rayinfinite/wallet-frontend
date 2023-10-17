@@ -1,81 +1,174 @@
 import '@/material.css';
-import { getTransactionRange } from '@/services/wallet/transaction';
-import { ProList } from '@ant-design/pro-components';
-import { Space, Tag } from 'antd';
-import { useEffect, useState } from 'react';
+import { getAccountPage } from '@/services/wallet/account';
+import { deleteTransaction, getTransactionRange } from '@/services/wallet/transaction';
+import t from '@/utils/i18n';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { type ProColumns } from '@ant-design/pro-components';
+import { ProTable, type RequestData } from '@ant-design/pro-table';
+import { FormattedMessage, useModel } from '@umijs/max';
+import { Button } from 'antd';
+import { useState } from 'react';
+import ActionForm from './form';
+const dayjs = require('dayjs');
 
-const getData = async (): Promise<API.Transaction[]> => {
-  const currentDate = new Date();
-  const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-  const currentDateISOString = currentDate.toISOString(); // 日期部分
-  const firstDayOfMonthISOString = firstDayOfMonth.toISOString(); // 日期部分
-  const msg = await getTransactionRange({
-    current: 1,
-    pageSize: 30,
-    start: firstDayOfMonthISOString,
-    end: currentDateISOString,
-  });
-  return msg.data?.content || [];
-};
+function formatDate(inputString: string | undefined) {
+  const date = dayjs(inputString);
+  if (!date.isValid()) {
+    console.log(inputString);
+    return 'Invalid Date'; // 处理无效日期输入
+  }
+  return date.format('YY-MM-DD HH:mm');
+}
 
 export default () => {
-  const [dataSource, setDataSource] = useState<API.Transaction[]>();
-  useEffect(() => {
-    getData().then((data) => {
-      console.log(data);
-      setDataSource(data);
+  const { actionRef } = useModel('model');
+  const { visible, setVisible } = useModel('modal');
+  const [initialValues, setInitialValues] = useState<API.Transaction | null>(null);
+  const [account, setAccount] = useState<Map<number, string>>(new Map());
+
+  const fetchAccounts = async () => {
+    const res = await getAccountPage({ current: 1, pageSize: 1000, name: '' });
+    if (res.data?.content) {
+      const accountMap = res.data.content.reduce((acc, account) => {
+        acc.set(account.id, account.name || 'no label');
+        return acc;
+      }, new Map());
+      setAccount(accountMap);
+    }
+  };
+
+  const getData = async (
+    params: API.getTransactionRangeParams,
+  ): Promise<Partial<RequestData<API.Transaction>>> => {
+    console.log(params);
+    fetchAccounts();
+    const currentDate = dayjs().add(1, 'day');
+    const firstDayOfMonth = dayjs().startOf('month');
+    const currentDateISOString = currentDate.format('YYYY-MM-DDTHH:mm:ss');
+    const firstDayOfMonthISOString = firstDayOfMonth.format('YYYY-MM-DDTHH:mm:ss');
+    console.log(currentDateISOString, firstDayOfMonthISOString);
+    const msg = await getTransactionRange({
+      current: 0,
+      pageSize: 1000,
+      start: params.start ?? firstDayOfMonthISOString,
+      end: params.end ?? currentDateISOString,
     });
-  }, []);
+    const list = msg.data?.content || [];
+    list.sort((a, b) => {
+      return a.time && b.time ? b.time.localeCompare(a.time) : 0;
+    });
+    return {
+      data: list,
+      success: true,
+      total: list.length,
+    };
+  };
+
+  const columns: ProColumns<API.Transaction>[] = [
+    {
+      title: t('name'),
+      dataIndex: 'category',
+      render: (text, row) => {
+        return (
+          <>
+            <span className="material-symbols-outlined">{row.category?.icon}</span>
+            {row.category?.name}
+          </>
+        );
+      },
+      hideInSearch: true,
+    },
+    {
+      title: t('description'),
+      dataIndex: 'notes',
+      hideInSearch: true,
+    },
+    {
+      title: t('type'),
+      dataIndex: 'type',
+      render: (text, row) => (row.category?.type === 1 ? t('income') : t('expense')),
+      hideInSearch: true,
+    },
+    {
+      title: t('amount'),
+      dataIndex: 'amount',
+      hideInSearch: true,
+    },
+    {
+      title: t('time'),
+      dataIndex: 'time',
+      render: (text, row) => formatDate(row.time as string),
+      valueType: 'dateRange',
+      search: {
+        transform: (value) => ({
+          start: dayjs(value[0]).startOf('day').format('YYYY-MM-DDTHH:mm:ss'),
+          end: dayjs(value[1]).endOf('day').format('YYYY-MM-DDTHH:mm:ss'),
+        }),
+      },
+      // fieldProps: {
+      //   allowEmpty: [true, true],
+      //   // ranges: datePickerRanges(),
+      // },
+    },
+    {
+      title: t('account'),
+      dataIndex: 'account',
+      render: (text, row) => account.get(row.account!),
+      hideInSearch: true,
+    },
+    {
+      title: t('operation'),
+      valueType: 'option',
+      key: 'option',
+      render: (text, record, _, action) => [
+        <EditOutlined
+          key="edit"
+          onClick={() => {
+            setInitialValues(record);
+            setVisible(true);
+          }}
+        />,
+        <a
+          key="delete"
+          onClick={async () => {
+            if (record.id !== undefined) {
+              await deleteTransaction({ id: record.id }).then(() => {
+                action?.reload();
+              });
+            }
+          }}
+        >
+          <DeleteOutlined />
+        </a>,
+      ],
+    },
+  ];
+
   return (
-    <ProList<API.Transaction>
-      rowKey="id"
-      headerTitle="基础列表"
-      dataSource={dataSource}
-      showActions="hover"
-      editable={{
-        onSave: async (key, record, originRow) => {
-          console.log(key, record, originRow);
-          return true;
-        },
-      }}
-      onDataSourceChange={setDataSource}
-      metas={{
-        title: {
-          dataIndex: 'catagory.name',
-        },
-        avatar: {
-          dataIndex: 'catagory.icon',
-          render: (text, row) => {
-            return <span className="material-symbols-outlined">{row.category?.icon}</span>;
-          },
-        },
-        description: {
-          dataIndex: 'time',
-        },
-        subTitle: {
-          render: () => {
-            return (
-              <Space size={0}>
-                <Tag color="blue">Ant Design</Tag>
-                <Tag color="#5BD8A6">TechUI</Tag>
-              </Space>
-            );
-          },
-        },
-        actions: {
-          dataIndex: 'amount',
-          // render: (text, row, index, action) => [
-          //   <a
-          //     onClick={() => {
-          //       action?.startEditable(row.id);
-          //     }}
-          //     key="link"
-          //   >
-          //     编辑
-          //   </a>,
-          // ],
-        },
-      }}
-    />
+    <>
+      <ProTable<API.Transaction, API.getTransactionRangeParams>
+        actionRef={actionRef}
+        headerTitle={t('transaction')}
+        columns={columns}
+        rowKey="id"
+        pagination={{
+          defaultPageSize: 10,
+        }}
+        toolBarRender={() => [
+          <Button
+            type="primary"
+            key="add"
+            onClick={() => {
+              setInitialValues(null);
+              setVisible(true);
+            }}
+          >
+            <PlusOutlined /> <FormattedMessage id="add" defaultMessage="New" />
+          </Button>,
+        ]}
+        request={(params) => getData(params)}
+      />
+      {visible && <ActionForm actionRef={actionRef} init={initialValues} />}
+    </>
   );
 };

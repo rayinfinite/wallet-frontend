@@ -3,32 +3,27 @@ import { addBook, updateBook } from '@/services/wallet/book';
 import { amountRule, requiredRule } from '@/utils/formInputRules';
 import t from '@/utils/i18n';
 import { ProFormText, ProFormTextArea } from '@ant-design/pro-components';
-import { useEffect, useState } from 'react';
 
 interface ActionFormProps {
-  trigger: React.ReactElement;
   actionRef: React.RefObject<any>;
-  init?: Record<string, any>;
+  init?: API.Book | null;
 }
 
-const ActionForm: React.FC<ActionFormProps> = ({ trigger, actionRef, init }) => {
-  const [initialValues, setInitialValues] = useState({});
-
-  useEffect(() => {
+const ActionForm: React.FC<ActionFormProps> = ({ actionRef, init }) => {
+  const onInit = () => {
     if (init) {
-      setInitialValues(init);
-    } else {
-      const initialValues: API.AddBook = {
-        name: 'new account',
-        description: '',
-        disabled: false,
-        income: 0,
-        expense: 0,
-        balance: 0,
-      };
-      setInitialValues(initialValues);
+      return init;
     }
-  }, [init]);
+    const initialValues: API.AddBook = {
+      name: 'new book',
+      description: '',
+      disabled: false,
+      income: 0,
+      expense: 0,
+      balance: 0,
+    };
+    return initialValues;
+  };
 
   const successHandler = () => {
     actionRef.current?.reload();
@@ -36,7 +31,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ trigger, actionRef, init }) => 
 
   const requestHandler = async (values: API.AddBook) => {
     if (init) {
-      await updateBook({ id: init.id, addBook: values });
+      await updateBook({ id: init.id || 0, addBook: values });
     } else {
       await addBook({ addBook: values });
     }
@@ -46,12 +41,11 @@ const ActionForm: React.FC<ActionFormProps> = ({ trigger, actionRef, init }) => 
     <>
       <MyModalForm
         title={init ? t('edit') + ' ' + init.name : t('add')}
-        trigger={trigger}
         width={700}
         labelWidth={85}
         request={requestHandler}
         onSuccess={successHandler}
-        initialValues={initialValues}
+        onInit={onInit}
       >
         <ProFormText name="name" label={t('name')} rules={requiredRule()} />
         <ProFormTextArea name="description" label={t('label.description')} />

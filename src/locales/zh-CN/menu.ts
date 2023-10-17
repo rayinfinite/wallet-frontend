@@ -1,5 +1,5 @@
 export default {
-  'menu.detail': '详情页',
+  'menu.detail': '明细',
   'menu.book': '账本',
   'menu.account': '钱包',
 
@@ -11,7 +11,7 @@ export default {
   'menu.login': '登录',
   'menu.register': '注册',
   'menu.register-result': '注册结果',
-  'menu.dashboard': 'Dashboard',
+  'menu.dashboard': '统计',
   'menu.dashboard.analysis': '分析页',
   'menu.dashboard.monitor': '监控页',
   'menu.dashboard.workplace': '工作台',
