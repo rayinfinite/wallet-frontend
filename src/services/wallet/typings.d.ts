@@ -26,6 +26,7 @@ declare namespace API {
   type AddBook = {
     name?: string;
     description?: string;
+    deleted?: boolean;
     disabled?: boolean;
     income?: number;
     expense?: number;
@@ -76,6 +77,18 @@ declare namespace API {
   type BaseResponseCategory = {
     code?: number;
     data?: Category;
+    message?: string;
+  };
+
+  type BaseResponseListAccount = {
+    code?: number;
+    data?: Account[];
+    message?: string;
+  };
+
+  type BaseResponseListBigDecimal = {
+    code?: number;
+    data?: number[];
     message?: string;
   };
 
@@ -149,7 +162,6 @@ declare namespace API {
     id?: number;
     name?: string;
     description?: string;
-    userId?: number;
     createTime?: string;
     updateTime?: string;
     deleted?: boolean;
@@ -157,6 +169,7 @@ declare namespace API {
     income?: number;
     expense?: number;
     balance?: number;
+    userId?: number;
     defaultAccount?: number;
   };
 
@@ -253,10 +266,10 @@ declare namespace API {
   type PageableObject = {
     offset?: number;
     sort?: SortObject;
+    unpaged?: boolean;
+    paged?: boolean;
     pageSize?: number;
     pageNumber?: number;
-    paged?: boolean;
-    unpaged?: boolean;
   };
 
   type PageAccount = {
@@ -268,8 +281,10 @@ declare namespace API {
     content?: Account[];
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
+    first?: boolean;
+    last?: boolean;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
   };
 
@@ -282,15 +297,17 @@ declare namespace API {
     content?: Transaction[];
     number?: number;
     sort?: SortObject;
-    numberOfElements?: number;
+    first?: boolean;
+    last?: boolean;
     pageable?: PageableObject;
+    numberOfElements?: number;
     empty?: boolean;
   };
 
   type SortObject = {
     empty?: boolean;
-    sorted?: boolean;
     unsorted?: boolean;
+    sorted?: boolean;
   };
 
   type Transaction = {

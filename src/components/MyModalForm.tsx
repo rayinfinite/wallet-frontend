@@ -46,7 +46,6 @@ export default function MyModalForm(props: MyModalFormProps) {
   const onOpenChange = async (open: boolean) => {
     setVisible(open);
     const a = await onInit();
-    console.log('a', a);
     formRef.current?.setFieldsValue({ ...(a || {}) });
   };
 

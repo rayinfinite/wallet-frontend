@@ -3,7 +3,7 @@ import t from '@/utils/i18n';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { type ProColumns } from '@ant-design/pro-components';
 import { ProTable, type RequestData } from '@ant-design/pro-table';
-import { FormattedMessage, useModel } from '@umijs/max';
+import { useModel } from '@umijs/max';
 import { Button } from 'antd';
 import { useState } from 'react';
 import ActionForm from './form';
@@ -103,7 +103,7 @@ export default () => {
               setVisible(true);
             }}
           >
-            <PlusOutlined /> <FormattedMessage id="add" defaultMessage="New" />
+            <PlusOutlined /> {t('add')}
           </Button>,
         ]}
         request={getData}

@@ -23,6 +23,12 @@ export default [
     ],
   },
   {
+    path: '/transaction',
+    name: 'transaction',
+    icon: 'smile',
+    component: './Detail/list',
+  },
+  {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
@@ -54,7 +60,7 @@ export default [
   },
   {
     path: '/',
-    redirect: '/welcome',
+    redirect: '/transaction',
   },
   {
     path: '*',

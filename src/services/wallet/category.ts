@@ -2,6 +2,14 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
+/** Get all category GET /category/ */
+export async function getAllCategory(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListCategory>('/category/', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** Get category GET /category/${param0} */
 export async function getCategory(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
@@ -71,14 +79,6 @@ export async function addCategory(
 /** Initialize category GET /category/init */
 export async function initCategory(options?: { [key: string]: any }) {
   return request<API.BaseResponseString>('/category/init', {
-    method: 'GET',
-    ...(options || {}),
-  });
-}
-
-/** Get category page GET /category/list */
-export async function getCategoryPage(options?: { [key: string]: any }) {
-  return request<API.BaseResponseListCategory>('/category/list', {
     method: 'GET',
     ...(options || {}),
   });

@@ -1,4 +1,5 @@
 export default {
+  'menu.transaction': '交易',
   'menu.detail': '明细',
   'menu.book': '账本',
   'menu.account': '钱包',

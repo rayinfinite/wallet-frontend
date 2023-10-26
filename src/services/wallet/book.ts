@@ -75,7 +75,7 @@ export async function getBookList(options?: { [key: string]: any }) {
 
 /** Book Overview GET /book/overview */
 export async function overview(options?: { [key: string]: any }) {
-  return request<API.BaseResponseLong>('/book/overview', {
+  return request<API.BaseResponseListBigDecimal>('/book/overview', {
     method: 'GET',
     ...(options || {}),
   });

@@ -6,12 +6,13 @@ export default {
   balance: '余额',
   income: '收入',
   expense: '支出',
+  all: '全部',
   'Create Time': '创建时间',
   operation: '操作',
   'label.name': '名称',
   'label.description': '描述',
 
-  account: '账户',
+  account: '钱包',
   book: '账本',
 
   time: '时间',
@@ -35,4 +36,6 @@ export default {
   'last.year': '去年',
   'tab.expense.category': '支出分类',
   'tab.income.category': '收入分类',
+
+  date: '日期',
 };

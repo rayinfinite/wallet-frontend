@@ -15,6 +15,7 @@ interface ResponseStructure {
  */
 export const Config: RequestConfig = {
   baseURL: '/api',
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
     'Accept-Language': localStorage.getItem('umi_locale') ?? 'zh-CN',

@@ -1,5 +1,6 @@
 import { Footer } from '@/components';
 import { CurrentUser, login, register } from '@/services/wallet/login';
+import t from '@/utils/i18n';
 import {
   AlipayCircleOutlined,
   LockOutlined,
@@ -11,7 +12,7 @@ import {
 } from '@ant-design/icons';
 import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { FormattedMessage, Helmet, SelectLang, history, useIntl, useModel } from '@umijs/max';
+import { Helmet, SelectLang, history, useIntl, useModel } from '@umijs/max';
 import { Alert, Tabs, message } from 'antd';
 import React, { useState } from 'react';
 import Settings from '../../../config/defaultSettings';
@@ -136,7 +137,7 @@ const Login: React.FC = () => {
     <div className={containerClassName}>
       <Helmet>
         <title>
-          {intl.formatMessage({ id: 'menu.login', defaultMessage: '登录页' })}- {Settings.title}
+          {t('menu.login')}- {Settings.title}
         </title>
       </Helmet>
       <Lang />
@@ -149,18 +150,11 @@ const Login: React.FC = () => {
           }}
           logo={<img alt="logo" src="/logo.svg" />}
           title="Ant Design"
-          subTitle={intl.formatMessage({ id: 'pages.layouts.userLayout.title' })}
+          subTitle={t('pages.layouts.userLayout.title')}
           initialValues={{
             autoLogin: true,
           }}
-          actions={[
-            <FormattedMessage
-              key="loginWith"
-              id="pages.login.loginWith"
-              defaultMessage="其他登录方式"
-            />,
-            <ActionIcons key="icons" />,
-          ]}
+          actions={[t('pages.login.loginWith'), <ActionIcons key="icons" />]}
           onFinish={async (values) => {
             await handleAuthentication(values as API.Login | API.AddUser);
           }}
@@ -181,26 +175,16 @@ const Login: React.FC = () => {
             items={[
               {
                 key: 'login',
-                label: intl.formatMessage({
-                  id: 'pages.login.login.tab',
-                }),
+                label: t('pages.login.login.tab'),
               },
               {
                 key: 'register',
-                label: intl.formatMessage({
-                  id: 'pages.login.register.tab',
-                }),
+                label: t('pages.login.register.tab'),
               },
             ]}
           />
-
           {hasError === true && type === 'login' && (
-            <LoginMessage
-              content={intl.formatMessage({
-                id: 'pages.login.accountLogin.errorMessage',
-                defaultMessage: '账户或密码错误(admin/ant.design)',
-              })}
-            />
+            <LoginMessage content={t('pages.login.accountLogin.errorMessage')} />
           )}
           {type === 'login' && (
             <>
@@ -210,19 +194,11 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined />,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.username.placeholder',
-                  defaultMessage: '用户名: admin or user',
-                })}
+                placeholder={t('pages.login.username.placeholder')}
                 rules={[
                   {
                     required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.username.required"
-                        defaultMessage="请输入用户名!"
-                      />
-                    ),
+                    message: t('pages.login.username.required'),
                   },
                 ]}
               />
@@ -232,19 +208,11 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <LockOutlined />,
                 }}
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.password.placeholder',
-                  defaultMessage: '密码: ant.design',
-                })}
+                placeholder={t('pages.login.password.placeholder')}
                 rules={[
                   {
                     required: true,
-                    message: (
-                      <FormattedMessage
-                        id="pages.login.password.required"
-                        defaultMessage="请输入密码！"
-                      />
-                    ),
+                    message: t('pages.login.password.required'),
                   },
                 ]}
               />
@@ -260,17 +228,15 @@ const Login: React.FC = () => {
                   prefix: <UserOutlined />,
                 }}
                 name="username"
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.register.username.placeholder',
-                })}
+                placeholder={t('pages.login.register.username.placeholder')}
                 rules={[
                   {
                     required: true,
-                    message: <FormattedMessage id="pages.login.register.username.required" />,
+                    message: t('pages.login.register.username.required'),
                   },
                   {
                     pattern: /^[a-zA-Z0-9]{3,16}$/,
-                    message: <FormattedMessage id="pages.login.register.username.invalid" />,
+                    message: t('pages.login.register.username.invalid'),
                   },
                 ]}
               />
@@ -280,17 +246,15 @@ const Login: React.FC = () => {
                   prefix: <LockOutlined />,
                 }}
                 name="password"
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.register.password.placeholder',
-                })}
+                placeholder={t('pages.login.register.password.placeholder')}
                 rules={[
                   {
                     required: true,
-                    message: <FormattedMessage id="pages.login.register.password.required" />,
+                    message: t('pages.login.register.password.required'),
                   },
                   {
                     pattern: /^.{6,}$/,
-                    message: <FormattedMessage id="pages.login.register.password.invalid" />,
+                    message: t('pages.login.register.password.invalid'),
                   },
                 ]}
               />
@@ -300,14 +264,11 @@ const Login: React.FC = () => {
                   prefix: <MobileOutlined />,
                 }}
                 name="telephone"
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.phoneNumber.placeholder',
-                  defaultMessage: '电话号码',
-                })}
+                placeholder={t('pages.login.phoneNumber.placeholder')}
                 rules={[
                   {
                     pattern: /^\d{8,}$/,
-                    message: <FormattedMessage id="pages.login.phoneNumber.invalid" />,
+                    message: t('pages.login.phoneNumber.invalid'),
                   },
                 ]}
               />
@@ -317,13 +278,11 @@ const Login: React.FC = () => {
                   prefix: <MailOutlined />,
                 }}
                 name="email"
-                placeholder={intl.formatMessage({
-                  id: 'pages.login.register.email.placeholder',
-                })}
+                placeholder={t('pages.login.register.email.placeholder')}
                 rules={[
                   {
                     pattern: /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,
-                    message: <FormattedMessage id="pages.login.register.email.invalid" />,
+                    message: t('pages.login.register.email.invalid'),
                   },
                 ]}
               />
@@ -331,7 +290,7 @@ const Login: React.FC = () => {
           )}
           <div style={{ marginBottom: 24 }}>
             <ProFormCheckbox noStyle name="autoLogin">
-              <FormattedMessage id="pages.login.rememberMe" defaultMessage="自动登录" />
+              {t('pages.login.rememberMe')}
             </ProFormCheckbox>
           </div>
         </LoginForm>

@@ -1,9 +1,9 @@
 import MyModalForm from '@/components/MyModalForm';
 import { getAccountPage } from '@/services/wallet/account';
-import { getCategoryPage } from '@/services/wallet/category';
 import { addTransaction, updateTransaction } from '@/services/wallet/transaction';
 import t from '@/utils/i18n';
 import {
+  ProForm,
   ProFormDateTimePicker,
   ProFormDigit,
   ProFormSegmented,
@@ -15,13 +15,13 @@ import { useState } from 'react';
 interface ActionFormProps {
   actionRef: React.RefObject<any>;
   init?: (API.Transaction & API.AddTransaction) | API.Transaction | null;
+  category: { value: number; label: string }[][];
 }
 
 const dayjs = require('dayjs');
 
-const ActionForm: React.FC<ActionFormProps> = ({ actionRef, init }) => {
+const ActionForm: React.FC<ActionFormProps> = ({ actionRef, init, category }) => {
   const [account, setAccount] = useState<{ value: number; label: string }[]>([]);
-  const [category, setCategory] = useState<{ value: number; label: string; type: string }[]>([]);
 
   const onInit = () => {
     const fetchAccounts = async () => {
@@ -35,20 +35,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ actionRef, init }) => {
         );
       }
     };
-    const fetchCategoryData = async () => {
-      const res = await getCategoryPage();
-      if (res.data) {
-        setCategory(
-          res.data.map((category) => ({
-            value: category.id || 0,
-            label: category.name || 'no name',
-            type: category.type?.toString() || '0',
-          })),
-        );
-      }
-    };
     fetchAccounts();
-    fetchCategoryData();
     if (init) {
       const initialValues = init as API.Transaction & API.AddTransaction;
       initialValues.categoryId = init.category?.id || 0;
@@ -61,7 +48,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ actionRef, init }) => {
       time: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
       notes: '',
       accountId: 1,
-      categoryId: 1,
+      categoryId: 9,
       type: '0',
     };
     return initialValues;
@@ -72,7 +59,6 @@ const ActionForm: React.FC<ActionFormProps> = ({ actionRef, init }) => {
   };
 
   const requestHandler = async (values: API.AddTransaction) => {
-    console.log(values);
     if (init) {
       await updateTransaction({ id: init.id || 0, addTransaction: values });
     } else {
@@ -107,7 +93,12 @@ const ActionForm: React.FC<ActionFormProps> = ({ actionRef, init }) => {
         />
         <ProFormTextArea name="notes" label={t('label.description')} />
         <ProFormSegmented name="type" label="交易类别" valueEnum={{ 0: '支出', 1: '收入' }} />
-        <ProFormSelect options={category} name="categoryId" label="所属种类" />
+        <ProForm.Item noStyle shouldUpdate>
+          {(form) => {
+            const data = category[form.getFieldValue('type')];
+            return <ProFormSelect options={data} name="categoryId" label="所属种类" />;
+          }}
+        </ProForm.Item>
       </MyModalForm>
     </>
   );

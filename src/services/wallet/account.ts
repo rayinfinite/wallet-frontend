@@ -2,6 +2,14 @@
 /* eslint-disable */
 import { request } from '@umijs/max';
 
+/** Get all account GET /account/ */
+export async function getAllAccount(options?: { [key: string]: any }) {
+  return request<API.BaseResponseListAccount>('/account/', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 /** Add account POST /account/ */
 export async function addAccount(body: API.AddAccount, options?: { [key: string]: any }) {
   return request<API.BaseResponseString>('/account/', {

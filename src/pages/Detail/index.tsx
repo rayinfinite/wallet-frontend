@@ -1,11 +1,12 @@
 import '@/material.css';
 import { getAccountPage } from '@/services/wallet/account';
+import { getAllCategory } from '@/services/wallet/category';
 import { deleteTransaction, getTransactionRange } from '@/services/wallet/transaction';
 import t from '@/utils/i18n';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { type ProColumns } from '@ant-design/pro-components';
 import { ProTable, type RequestData } from '@ant-design/pro-table';
-import { FormattedMessage, useModel } from '@umijs/max';
+import { useModel } from '@umijs/max';
 import { Button } from 'antd';
 import { useState } from 'react';
 import ActionForm from './form';
@@ -25,6 +26,7 @@ export default () => {
   const { visible, setVisible } = useModel('modal');
   const [initialValues, setInitialValues] = useState<API.Transaction | null>(null);
   const [account, setAccount] = useState<Map<number, string>>(new Map());
+  const [category, setCategory] = useState<{ value: number; label: string }[][]>([[], []]);
 
   const fetchAccounts = async () => {
     const res = await getAccountPage({ current: 1, pageSize: 1000, name: '' });
@@ -37,16 +39,31 @@ export default () => {
     }
   };
 
+  const fetchCategoryData = async () => {
+    const res = await getAllCategory();
+    if (res.data) {
+      setCategory(
+        res.data.reduce((acc, categoryData) => {
+          const newCategory = {
+            value: categoryData.id || 0,
+            label: categoryData.name || 'no name',
+          };
+          acc[categoryData.type || 0].push(newCategory);
+          return acc;
+        }, category),
+      );
+    }
+  };
+
   const getData = async (
     params: API.getTransactionRangeParams,
   ): Promise<Partial<RequestData<API.Transaction>>> => {
-    console.log(params);
     fetchAccounts();
+    fetchCategoryData();
     const currentDate = dayjs().add(1, 'day');
     const firstDayOfMonth = dayjs().startOf('month');
     const currentDateISOString = currentDate.format('YYYY-MM-DDTHH:mm:ss');
     const firstDayOfMonthISOString = firstDayOfMonth.format('YYYY-MM-DDTHH:mm:ss');
-    console.log(currentDateISOString, firstDayOfMonthISOString);
     const msg = await getTransactionRange({
       current: 0,
       pageSize: 1000,
@@ -163,12 +180,12 @@ export default () => {
               setVisible(true);
             }}
           >
-            <PlusOutlined /> <FormattedMessage id="add" defaultMessage="New" />
+            <PlusOutlined /> {t('add')}
           </Button>,
         ]}
         request={(params) => getData(params)}
       />
-      {visible && <ActionForm actionRef={actionRef} init={initialValues} />}
+      {visible && <ActionForm actionRef={actionRef} init={initialValues} category={category} />}
     </>
   );
 };
