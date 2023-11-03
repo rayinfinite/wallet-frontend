@@ -16,9 +16,18 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build and deploy
+    - name: Build
       run: |
         npm run build
+
+    - name: Deploy
+      run: |
+        scp -o StrictHostKeyChecking=no -r ./dist/* ubuntu@43.134.23.181:/home/ubuntu
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy
+      run: |
         scp -o StrictHostKeyChecking=no -r ./dist/* ubuntu@43.134.23.181:/var/www/html/dist
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
