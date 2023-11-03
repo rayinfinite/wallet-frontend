@@ -3,7 +3,7 @@ name: Deploy to Nginx
 on:
   push:
     branches:
-      - main # 替换成你的主分支名称
+      - main
 
 jobs:
   deploy:
@@ -17,17 +17,7 @@ jobs:
       run: npm install
 
     - name: Build
-      run: |
-        npm run build
-
-    - name: Deploy
-      uses: easingthemes/ssh-deploy@main
-      with:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SOURCE: ./dist
-        REMOTE_HOST: 43.134.23.181
-        REMOTE_USER: ubuntu
-        TARGET: /home/ubuntu
+      run: npm run build
 
     - name: Deploy
       uses: easingthemes/ssh-deploy@main
