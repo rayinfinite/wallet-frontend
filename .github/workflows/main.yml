@@ -16,13 +16,9 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Add server host key to known_hosts
-      run: |
-        ssh-keyscan 43.134.23.181 >> ~/.ssh/known_hosts
-
     - name: Build and deploy
       run: |
         npm run build
-        scp -r ./dist/* ubuntu@43.134.23.181:/var/www/html/dist
+        scp -o StrictHostKeyChecking=no -r ./dist/* ubuntu@43.134.23.181:/var/www/html/dist
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
