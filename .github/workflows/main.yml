@@ -1,0 +1,24 @@
+name: Deploy to Nginx
+
+on:
+  push:
+    branches:
+      - main # 替换成你的主分支名称
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build and deploy
+      run: |
+        npm run build
+        scp -r ./dist/* ubuntu@43.134.23.181:/var/www/html/dist
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
