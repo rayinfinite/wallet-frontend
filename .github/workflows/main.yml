@@ -21,13 +21,19 @@ jobs:
         npm run build
 
     - name: Deploy
-      run: |
-        scp -o StrictHostKeyChecking=no -r ./dist/* ubuntu@43.134.23.181:/home/ubuntu
-      env:
+      uses: easingthemes/ssh-deploy@main
+      with:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SOURCE: ./dist
+        REMOTE_HOST: 43.134.23.181
+        REMOTE_USER: ubuntu
+        TARGET: /home/ubuntu
 
     - name: Deploy
-      run: |
-        scp -o StrictHostKeyChecking=no -r ./dist/* ubuntu@43.134.23.181:/var/www/html/dist
-      env:
+      uses: easingthemes/ssh-deploy@main
+      with:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SOURCE: ./dist
+        REMOTE_HOST: 43.134.23.181
+        REMOTE_USER: ubuntu
+        TARGET: /var/www/html
