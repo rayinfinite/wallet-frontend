@@ -161,7 +161,7 @@ const Login: React.FC = () => {
           submitter={{
             // 配置按钮文本
             searchConfig: {
-              submitText: type === 'login' ? '登录' : '注册',
+              submitText: type === 'login' ? t('login') : t('register'),
             },
           }}
         >
@@ -218,7 +218,8 @@ const Login: React.FC = () => {
               />
             </>
           )}
-
+          {/* TODO:  React has detected a change in the order of Hooks called by Login
+          Caused by t("") */}
           {hasError === true && type === 'register' && <LoginMessage content="注册失败" />}
           {type === 'register' && (
             <>

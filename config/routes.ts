@@ -29,12 +29,6 @@ export default [
     component: './Detail/list',
   },
   {
-    path: '/welcome',
-    name: 'welcome',
-    icon: 'smile',
-    component: './Welcome',
-  },
-  {
     path: '/dashboard',
     name: 'dashboard',
     icon: 'PieChart',

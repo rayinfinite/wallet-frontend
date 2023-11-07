@@ -4,7 +4,7 @@ import { getAllCategory } from '@/services/wallet/category';
 import { getTransactionRange } from '@/services/wallet/transaction';
 import t from '@/utils/i18n';
 import { PlusOutlined } from '@ant-design/icons';
-import { ActionType, ProForm, QueryFilter } from '@ant-design/pro-components';
+import { ProForm, QueryFilter } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
 import { Button, Card, DatePicker, Flex, Grid, List, Select } from 'antd';
 import Meta from 'antd/es/card/Meta';
@@ -24,6 +24,10 @@ function formatDate(inputString: string | undefined) {
 
 const { useBreakpoint } = Grid;
 
+interface ActionRefType {
+  reload: () => void;
+}
+
 export default () => {
   const [accountMap, setAccountMap] = useState(new Map());
   const { visible, setVisible } = useModel('modal');
@@ -31,7 +35,7 @@ export default () => {
   const [dataSource, setDataSource] = useState<API.Transaction[]>();
   const [filtedDataSource, setFiltedDataSource] = useState<API.Transaction[]>();
   const [filter, setFilter] = useState<string>('all');
-  const actionRef = useRef<ActionType>();
+  const actionRef = useRef<null | ActionRefType>(null);
   const [columnCount, setColumnCount] = useState(2);
   const [category, setCategory] = useState<{ value: number; label: string }[][]>([[], []]);
   const screens = useBreakpoint();
@@ -86,7 +90,11 @@ export default () => {
     setFilter('all');
     return list;
   };
-
+  actionRef.current = {
+    reload: async () => {
+      await getData();
+    },
+  };
   const changeFilter = (value: string) => {
     setFilter(value);
     if (value === 'all') {

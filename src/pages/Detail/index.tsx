@@ -65,7 +65,7 @@ export default () => {
     const currentDateISOString = currentDate.format('YYYY-MM-DDTHH:mm:ss');
     const firstDayOfMonthISOString = firstDayOfMonth.format('YYYY-MM-DDTHH:mm:ss');
     const msg = await getTransactionRange({
-      current: 0,
+      current: 1,
       pageSize: 1000,
       start: params.start ?? firstDayOfMonthISOString,
       end: params.end ?? currentDateISOString,

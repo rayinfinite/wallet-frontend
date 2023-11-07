@@ -38,4 +38,6 @@ export default {
   'tab.income.category': '收入分类',
 
   date: '日期',
+  login: '登录',
+  register: '注册',
 };
