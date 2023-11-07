@@ -1,10 +1,11 @@
 import { deleteBook, getBookList } from '@/services/wallet/book';
+import { setDefaultBook } from '@/services/wallet/user';
 import t from '@/utils/i18n';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-table';
 import { useModel } from '@umijs/max';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { useState } from 'react';
 import ActionForm from './form';
 
@@ -68,6 +69,21 @@ export default () => {
         >
           <DeleteOutlined />
         </a>,
+        <Button
+          key="default"
+          size="small"
+          type="link"
+          disabled={record.disabled}
+          onClick={async () => {
+            if (record.id !== undefined) {
+              await setDefaultBook({ id: record.id }).then(() => {
+                message.success('Set as Default');
+              });
+            }
+          }}
+        >
+          {t('setDefaultBook')}
+        </Button>,
       ],
     },
   ];

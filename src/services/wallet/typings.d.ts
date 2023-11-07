@@ -122,12 +122,6 @@ declare namespace API {
     message?: string;
   };
 
-  type BaseResponseLong = {
-    code?: number;
-    data?: number[];
-    message?: string;
-  };
-
   type BaseResponsePageAccount = {
     code?: number;
     data?: PageAccount;
@@ -266,48 +260,52 @@ declare namespace API {
   type PageableObject = {
     offset?: number;
     sort?: SortObject;
+    pageNumber?: number;
+    pageSize?: number;
     unpaged?: boolean;
     paged?: boolean;
-    pageSize?: number;
-    pageNumber?: number;
   };
 
   type PageAccount = {
     totalPages?: number;
     totalElements?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Account[];
     number?: number;
     sort?: SortObject;
     first?: boolean;
     last?: boolean;
-    pageable?: PageableObject;
     numberOfElements?: number;
+    pageable?: PageableObject;
     empty?: boolean;
   };
 
   type PageTransaction = {
     totalPages?: number;
     totalElements?: number;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Transaction[];
     number?: number;
     sort?: SortObject;
     first?: boolean;
     last?: boolean;
-    pageable?: PageableObject;
     numberOfElements?: number;
+    pageable?: PageableObject;
     empty?: boolean;
+  };
+
+  type setBookParams = {
+    id: number;
+  };
+
+  type setDefaultBookParams = {
+    id: number;
   };
 
   type SortObject = {
     empty?: boolean;
-    unsorted?: boolean;
     sorted?: boolean;
+    unsorted?: boolean;
   };
 
   type Transaction = {

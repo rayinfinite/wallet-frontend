@@ -52,4 +52,6 @@ export default {
 
   login: 'Login',
   register: 'Register',
+
+  setDefaultBook: 'Set as Default',
 };

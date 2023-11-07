@@ -40,4 +40,6 @@ export default {
   date: '日期',
   login: '登录',
   register: '注册',
+
+  setDefaultBook: '设为默认账本',
 };

@@ -19,6 +19,34 @@ export async function changePassword(
   });
 }
 
+/** Set book GET /user/setBook/${param0} */
+export async function setBook(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.setBookParams,
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<API.BaseResponseString>(`/user/setBook/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
+/** Set default book GET /user/setDefaultBook/${param0} */
+export async function setDefaultBook(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.setDefaultBookParams,
+  options?: { [key: string]: any },
+) {
+  const { id: param0, ...queryParams } = params;
+  return request<API.BaseResponseString>(`/user/setDefaultBook/${param0}`, {
+    method: 'GET',
+    params: { ...queryParams },
+    ...(options || {}),
+  });
+}
+
 /** Update User POST /user/update */
 export async function updateUser(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
