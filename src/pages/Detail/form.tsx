@@ -81,7 +81,7 @@ const ActionForm: React.FC<ActionFormProps> = ({ actionRef, init, category }) =>
           name="time"
           label={t('time')}
           fieldProps={{
-            format: (value) => value.format('YYYY-MM-DD'),
+            format: (value) => value.format('YYYY-MM-DDTHH:mm:ss'),
           }}
         />
         <ProFormDigit
